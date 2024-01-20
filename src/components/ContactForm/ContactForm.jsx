@@ -14,28 +14,33 @@ const ContactForm = ({onSubmit}) => {
   const[number, setNumber]=useState('')
 
   const handleChangeName = ({ target }) => {
-    const { name, value } = target;
-    console.log(value);
-    console.log(name);
+    const {  value } = target;
+    // console.log(value);
+    // console.log(name);
     setName(value)
   };  
 
   const handleChangeNumber = ({ target }) => {
-    const { name, value } = target;
-    console.log(value);
-    console.log(name);
+    const {  value } = target;
+    // console.log(value);
+    // console.log(name);
     setNumber(value)
   };  
 
   const contactNameId = useMemo(() => nanoid(), []);
   const contactNumberId = useMemo(() => nanoid(), []);
 
-  const handleSubmit = evt => {
+  const handleSubmit = (evt )=> {
     evt.preventDefault();
-    console.log(evt.target.name.value);
-    console.log(evt.target.number.value);
-    onSubmit(evt.target.name.value, evt.target.number.value);
-    // reset();
+    const { name, number} = evt.target;
+    
+    // console.log(name.value);
+    // console.log(number.value);
+    // onSubmit(evt.target.name.value, evt.target.number.value);
+onSubmit({name: name.value, number: number.value})
+// onSubmit(number.value)
+setName(''); setNumber('')
+    
   };
 
   // const handleChange = ({ target }) => {

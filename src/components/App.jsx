@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect,useRef} from 'react';
 import { nanoid } from 'nanoid';
 import styles from './ContactForm/ContactForm.module.css';
 import ContactForm from './ContactForm/ContactForm';
 import ContactList from './ContactList/ContactList';
 import Filter from './ContactList/Filter';
 
-// const LS_Key_Contact = 'phoneContact';
+const LS_Key_Contact = 'phoneContact';
 
 const contactExample = [{ id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
   { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
@@ -13,50 +13,72 @@ const contactExample = [{ id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'
   { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },]
 
 export const App = () => {
-  const[contacts, setCotacts] = useState(contactExample)
+  // const[contacts, setCotacts] = useState(()=> {
+  //   const contactsData = JSON.parse(localStorage.getItem(LS_Key_Contact));
+  //   return contactsData || []
+  // })
 
+  const[contacts, setCotacts]=useState(contactExample)
   const [filter, setFilter] = useState("");
 
-  // const isDublicate = (evt) => {
-  //   // const { contacts } = this.state;
-  //   const normalizedName = evt.name.toLowerCase();
-  //   console.log(normalizedName);
-  //   const dublicate = contacts.find(
-  //     contact => contact.name.toLocaleLowerCase() === normalizedName
-  //   );
-  //   return dublicate;
-  // }
+  const firstRender = useRef(true);
+
+useEffect(()=>{
+  console.log('first')
+  const contactsData = localStorage.getItem(LS_Key_Contact)
+  if(contactsData){
+    setCotacts(JSON.parse(contactsData))
+  }
+},[])
+  
+useEffect(()=>{
+  
+  if(!firstRender.current){
+    console.log('se')
+    localStorage.setItem(LS_Key_Contact, JSON.stringify(contacts))
+  }
+},[contacts])
+
+
+
+useEffect(()=> {
+  firstRender.current = false;
+}, [])
+
+  const isDublicate = (evt) => {
+// console.log(evt)
+    const normalizedName = evt.name.toLowerCase();
+    // console.log(normalizedName);
+    const dublicate = contacts.find(
+      contact => contact.name.toLocaleLowerCase() === normalizedName
+    );
+    return dublicate;
+  }
 
   const addContact = contact => {
-    console.log(contact)
-    // if (isDublicate(contact)) {
-    //   return alert(`${contact.name} is already in contacts`);
-    // }
+    // console.log(contact)
+    // console.log(isDublicate(contact))
+    if (isDublicate(contact)) {
+      return alert(`${contact.name} is already in contacts`);
+    }
     setCotacts(prevContact => {
       const newContact = {
         id: nanoid(),
         ...contact,
       };
-      return {
-        contacts: [...prevContact, newContact],
-      };
+      return  [...prevContact, newContact]
     });
   };
 
   const filterContacts = evt => {
     setFilter(evt.target.value)
-    // this.setState({
-    //   filter: evt.target.value,
-    // });
   };
 
   const getFilteredContacts = () => {
-    // const { filter, contacts } = this.state;
     if (!filter) {
       return contacts;
     }
     const normalizedFilter = filter.toLowerCase();
-
     return contacts.filter(contact =>
       contact.name.toLocaleLowerCase().includes(normalizedFilter)
     );
@@ -64,18 +86,13 @@ export const App = () => {
 
   const deleteContact = id => {
     console.log(id);
+    console.log(contacts)
     const newContacts = contacts.filter(contact => contact.id !== id);
-    return newContacts
-    // this.setState(({ contacts }) => {
-    //   const newContacts = contacts.filter(contact => contact.id !== id);
-
-    //   return {
-    //     contacts: newContacts,
-    //   };
-    // });
+    return setCotacts(newContacts)
   };
 
   const visibleContacts = getFilteredContacts();
+  console.log(visibleContacts)
 
   return (
     <div className={styles.wrap}>
