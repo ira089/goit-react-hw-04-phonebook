@@ -2,7 +2,7 @@ import styles from './ContactList.module.css';
 import ContactItems from 'components/ContactItems/ContactItems';
 
 const ContactList = ({items,deleteContact}) => {
-  console.log(items)
+  // console.log(items)
   
 const elements  = items.map(item => (<ContactItems
         key={item.id}

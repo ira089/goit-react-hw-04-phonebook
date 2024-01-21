@@ -24,7 +24,6 @@ export const App = () => {
   const firstRender = useRef(true);
 
 useEffect(()=>{
-  console.log('first')
   const contactsData = localStorage.getItem(LS_Key_Contact)
   if(contactsData){
     setCotacts(JSON.parse(contactsData))
@@ -32,14 +31,11 @@ useEffect(()=>{
 },[])
   
 useEffect(()=>{
-  
   if(!firstRender.current){
-    console.log('se')
+    // console.log(firstRender.current)
     localStorage.setItem(LS_Key_Contact, JSON.stringify(contacts))
   }
 },[contacts])
-
-
 
 useEffect(()=> {
   firstRender.current = false;
@@ -56,7 +52,6 @@ useEffect(()=> {
   }
 
   const addContact = contact => {
-    // console.log(contact)
     // console.log(isDublicate(contact))
     if (isDublicate(contact)) {
       return alert(`${contact.name} is already in contacts`);
@@ -85,14 +80,12 @@ useEffect(()=> {
   };
 
   const deleteContact = id => {
-    console.log(id);
-    console.log(contacts)
+    // console.log(contacts)
     const newContacts = contacts.filter(contact => contact.id !== id);
     return setCotacts(newContacts)
   };
 
   const visibleContacts = getFilteredContacts();
-  console.log(visibleContacts)
 
   return (
     <div className={styles.wrap}>

@@ -2,14 +2,8 @@ import { useState,useMemo } from 'react';
 import { nanoid } from 'nanoid';
 import styles from './ContactForm.module.css';
 
-// const INITIAL_STATE = {
-//   name: '',
-//   number: '',
-// };
-
 const ContactForm = ({onSubmit}) => {
 
-  // const [state, setState] = useState({...INITIAL_STATE});
   const [name, setName]= useState('');
   const[number, setNumber]=useState('')
 
@@ -33,35 +27,12 @@ const ContactForm = ({onSubmit}) => {
   const handleSubmit = (evt )=> {
     evt.preventDefault();
     const { name, number} = evt.target;
-    
-    // console.log(name.value);
-    // console.log(number.value);
-    // onSubmit(evt.target.name.value, evt.target.number.value);
 onSubmit({name: name.value, number: number.value})
-// onSubmit(number.value)
-setName(''); setNumber('')
-    
+setName(''); setNumber('') 
   };
 
-  // const handleChange = ({ target }) => {
-  //   const { name, value } = target;
-  //   console.log(value);
-  //   console.log(name);
-  //   this.setState({
-  //     [name]: value,
-  //   });
-  // };
-
-  // reset() {
-  //   this.setState({ ...INITIAL_STATE });
-  // }
-
-  
-    // const { handleSubmit, handleChange } = this;
-    // const { name, number } = this.state;
     return (
       <form onSubmit={handleSubmit} className={styles.formWrap}>
-        {/* <div className={styles.formItem}> */}
         <label htmlFor={contactNameId} className={styles.formItem}>
           Name
           <input
